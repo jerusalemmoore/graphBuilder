@@ -6,14 +6,12 @@
 using std::string;
 class Node{
   public:
-    Node(int intPtr);
-    Node(double doublePtr);
-    Node(string stringPtr);
+    Node(std::variant<int,double,string> data);
     void printData();
     ~Node();
   private:
     int* intPtr;
     double* doublePtr;
     string* stringPtr;
-    string type;
+    int type;
 };
