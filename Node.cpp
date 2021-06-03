@@ -1,4 +1,5 @@
 #include "Node.h"
+#include <stdio.h>
 #include <iostream>
 #include <stdexcept>
 #define INT 0
@@ -8,8 +9,9 @@ using std::string;
 using std::endl;
 using std::cout;
 using std::get;
-Node::Node(std::variant<int,double,string> data){
-  this->type = data.index();
+Node::Node(std::variant<int,double,string> data, string id){
+  this->id = id;
+  this->type = data.index();//this is to know what type of data type the value of the node will have
   switch(type){
     case INT:{
       int val = get<int>(data);
@@ -30,13 +32,13 @@ Node::Node(std::variant<int,double,string> data){
 }
 void Node::printData(){
   if(type == INT){
-    cout << *this->intPtr << endl;
+    cout << "id: " << this->id << "; value: " << *this->intPtr << endl;
   }
   else if(type == DOUBLE){
-    cout << *this->doublePtr << endl;
+    cout << "id: " << this->id << "; value: " <<  *this->doublePtr << endl;
   }
   else if (type == STRING){
-    cout << *this->stringPtr << endl;
+    cout << "id: " << this->id << "; value: " <<  *this->stringPtr << endl;
   }
   else{
     cout << "Error, no valid type" << endl;
