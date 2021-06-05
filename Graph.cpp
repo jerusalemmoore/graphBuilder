@@ -1,28 +1,59 @@
 #include "Graph.h"
 #include <iostream>
 
-void Graph::buildNode(std::variant<int,double,string> data, string id){
-//  if(!nodeExists(id)){
-  Node* newNode = new Node(data, id);
-  std::vector<Node*> newVector;
-  std::pair<Node*, std::vector<Node*>> adjListPair (newNode, newVector);
-  adjList.push_back(adjListPair);
-  // }
-  // else{
-  //   std::cout << "Error, node to add already exists\n";
-  // }
+//add nodes to graph, check if id exists and return false if so
+bool Graph::buildNode(std::variant<int,double,string> data, string id){
+ if(!nodeExists(id)){
+    Node* newNode = new Node(data, id);
+
+    std::vector<Node*> newVector;
+    std::pair<Node*, std::vector<Node*>> adjListPair (newNode, newVector);
+    adjList.push_back(adjListPair);
+    std::pair<std::string,Node*> nodeTablePair (newNode->getId(), newNode);
+    nodeTable.insert(nodeTablePair);
+
+    return true;
+  }
+  std::cout << "Error, node to add already exists\n";
+  return false;
 }
-void Graph::addEdge(Node* start, Node* end){
+void Graph::addEdge(string start, string end){
+  bool startDone = false;
+  bool endDone = false;
+  Node* startNode = nodeTable[start];
+  Node* endNode = nodeTable[end];
+  for(auto it = adjList.begin(); it < adjList.end(); it++){
+    if(it->first->getId() == startNode->getId()){
+      it->second.push_back(endNode);
+      startDone = true;
+    }
+    if(it->first->getId() == endNode->getId()){
+      it->second.push_back(startNode);
+      endDone = true;
+    }
+    if(startDone && endDone){
+      break;
+    }
+  }
 
 }
+//check if node id exists in graph and return true if it does
 bool Graph::nodeExists(string id){
-  for(auto i = adjList.begin(); i < adjList.end(); i++){
-    std::cout << "node\n";
+  for(auto it = adjList.begin(); it < adjList.end(); it++){
+    if(it->first->getId() == id){
+      return true;
+    }
   }
-  return true;
+  return false;
 }
 void Graph::printGraph(){
-  for(auto i = adjList.begin(); i < adjList.end(); i++){
-    i->first->printData();
+  for(auto it = adjList.begin(); it < adjList.end(); it++){
+    it->first->printData();
+    if(!it->second.empty()){
+      std::cout << "Neighbors:\n";
+      for(unsigned int i = 0; i < it->second.size(); i++){
+        it->second[i]->printData();
+      }
+    }
   }
 }

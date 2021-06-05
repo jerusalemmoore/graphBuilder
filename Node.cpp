@@ -30,6 +30,10 @@ Node::Node(std::variant<int,double,string> data, string id){
     }
   }
 }
+string Node::getId(){
+
+  return id;
+}
 void Node::printData(){
   if(type == INT){
     cout << "id: " << this->id << "; value: " << *this->intPtr << endl;

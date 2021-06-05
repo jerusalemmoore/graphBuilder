@@ -14,5 +14,7 @@ int main(){
   //GRAPH TESTING
   Graph* newGraph = new Graph();
   newGraph->buildNode(data, "node1");
+  newGraph->buildNode(data2, "node2");
+  newGraph->addEdge("node1", "node2");
   newGraph->printGraph();
 }
