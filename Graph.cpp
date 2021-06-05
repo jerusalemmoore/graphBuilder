@@ -23,6 +23,6 @@ bool Graph::nodeExists(string id){
 }
 void Graph::printGraph(){
   for(auto i = adjList.begin(); i < adjList.end(); i++){
-    std::cout << "node\n";
+    i->first->printData();
   }
 }
