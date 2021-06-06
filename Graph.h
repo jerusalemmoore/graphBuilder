@@ -9,8 +9,10 @@ class Graph{
 public:
   Graph(){};
   ~Graph();
-  bool buildNode(std::variant<int,double,string> data, string id);
+  bool buildVertex(std::variant<int,double,string> data, string id);
+  bool deleteVertex(string id);
   void addEdge(string start,  string end);
+  void removeEdge(string target, string neighbor);
   void printGraph();
   bool alreadyNeighbor(string neighborId, std::vector<Node*> v);
   bool nodeExists(string id);

@@ -8,7 +8,7 @@ Graph::~Graph(){
   // delete this;
 }
 //add nodes to graph, check if id exists and return false if so
-bool Graph::buildNode(std::variant<int,double,string> data, string id){
+bool Graph::buildVertex(std::variant<int,double,string> data, string id){
  if(!nodeExists(id)){
     Node* newNode = new Node(data, id);
 
@@ -22,6 +22,32 @@ bool Graph::buildNode(std::variant<int,double,string> data, string id){
   }
   std::cout << "Error, node to add already exists\n";
   return false;
+}
+bool Graph::deleteVertex(string id){
+  if(nodeTable.find(id) == nodeTable.end()){
+    std::cout << "Error, vertex to delete("<< id << ") does not exist\n";
+    return false;
+  }
+  Node* targetVertex = nodeTable[id];
+
+  //erase target from neighbor lists
+  for(auto it = adjList.begin(); it != adjList.end(); it++){
+    for(unsigned int i = 0; i < it->second.size(); i++){
+      if(targetVertex == it->second[i]){
+        it->second.erase(it->second.begin() + i);
+      }
+    }
+  }
+  //erase vertex from adjList
+  for(auto it = adjList.begin(); it != adjList.end(); it++){
+    if(targetVertex == it->first){
+      adjList.erase(it);
+      break;
+    }
+  }
+  nodeTable.erase(id);
+  //delete targetVertex;
+  return true;
 }
 bool Graph::alreadyNeighbor(string neighborId, std::vector<Node*> v){
   Node* neighborNode = nodeTable[neighborId];
@@ -37,7 +63,7 @@ void Graph::addEdge(string start, string end){
   bool startDone = false;
   bool endDone = false;
   if(start == end){
-    std::cout << "Error, vertex cannot be its own neighbor";
+    std::cout << "Error, vertex cannot be its own neighbor\n";
     return;
   }
   Node* startNode = nodeTable[start];
@@ -68,6 +94,23 @@ void Graph::addEdge(string start, string end){
   }
 
 }
+void Graph::removeEdge(string target, string neighbor){
+  Node* targetVertex = nodeTable[target];
+  Node* neighborVertex = nodeTable[neighbor];
+  for(auto it = adjList.begin(); it != adjList.end(); it++){
+    if(targetVertex == it->first){
+      for(unsigned int i = 0; i < it->second.size(); i++){
+        if(neighborVertex == it->second[i]){
+          std::cout << "deleted\n";
+          it->second.erase(it->second.begin() + i);
+        }
+      }
+    }
+
+  }
+
+}
+
 //check if node id exists in graph and return true if it does
 bool Graph::nodeExists(string id){
   for(auto it = adjList.begin(); it < adjList.end(); it++){
