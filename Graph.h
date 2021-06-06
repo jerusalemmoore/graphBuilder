@@ -8,10 +8,11 @@
 class Graph{
 public:
   Graph(){};
+  ~Graph();
   bool buildNode(std::variant<int,double,string> data, string id);
   void addEdge(string start,  string end);
   void printGraph();
-  bool alreadyHasNeighbor();
+  bool alreadyNeighbor(string neighborId, std::vector<Node*> v);
   bool nodeExists(string id);
 private:
   std::unordered_map<string,Node*> nodeTable;//lookup for all existing nodes of graph

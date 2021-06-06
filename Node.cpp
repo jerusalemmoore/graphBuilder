@@ -30,21 +30,38 @@ Node::Node(std::variant<int,double,string> data, string id){
     }
   }
 }
+Node::~Node(){
+  switch(type){
+    case INT:{
+      delete this->intPtr;
+
+      break;
+    }
+    case DOUBLE:{
+      delete this->doublePtr;
+      break;
+    }
+    case STRING:{
+      delete this->stringPtr;
+      break;
+    }
+  }
+}
 string Node::getId(){
 
   return id;
 }
-void Node::printData(){
+string Node::getData(){
   if(type == INT){
-    cout << "id: " << this->id << "; value: " << *this->intPtr << endl;
+    return "id: " + this->id + "; value: " + std::to_string(*this->intPtr);
   }
   else if(type == DOUBLE){
-    cout << "id: " << this->id << "; value: " <<  *this->doublePtr << endl;
+    return "id: " + this->id + "; value: " +  std::to_string(*this->doublePtr);
   }
   else if (type == STRING){
-    cout << "id: " << this->id << "; value: " <<  *this->stringPtr << endl;
+    return "id: " + this->id + "; value: " +  *this->stringPtr;
   }
   else{
-    cout << "Error, no valid type" << endl;
+    return "Error, no valid type";
   }
 }
