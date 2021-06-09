@@ -49,10 +49,10 @@ int main(){
   //   }
   // }
 
-  newGraph.buildVertex(data, "node1");
-  newGraph.buildVertex(data2, "node2");
-  newGraph.buildVertex(data3, "node3");
-  newGraph.buildVertex(data4, "node4");
+  newGraph.addVertex(data, "node1");
+  newGraph.addVertex(data2, "node2");
+  newGraph.addVertex(data3, "node3");
+  newGraph.addVertex(data4, "node4");
   newGraph.addEdge("node1", "node2");
   newGraph.addEdge("node1", "node2");
   newGraph.addEdge("node1", "node3");

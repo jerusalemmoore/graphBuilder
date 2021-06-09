@@ -8,7 +8,7 @@ Graph::~Graph(){
   // delete this;
 }
 //add nodes to graph, check if id exists and return false if so
-bool Graph::buildVertex(std::variant<int,double,string> data, string id){
+bool Graph::addVertex(std::variant<int,double,string> data, string id){
  if(!nodeExists(id)){
     Node* newNode = new Node(data, id);
 
@@ -17,20 +17,13 @@ bool Graph::buildVertex(std::variant<int,double,string> data, string id){
     adjList.push_back(adjListPair);
     std::pair<std::string,Node*> nodeTablePair (newNode->getId(), newNode);
     nodeTable.insert(nodeTablePair);
-
+    std::cout << "Success, node built.\n";
     return true;
   }
   std::cout << "Error, node to add already exists\n";
   return false;
 }
-bool Graph::deleteVertex(string id){
-  if(nodeTable.find(id) == nodeTable.end()){
-    std::cout << "Error, vertex to delete("<< id << ") does not exist\n";
-    return false;
-  }
-  Node* targetVertex = nodeTable[id];
-
-  //erase target from neighbor lists
+void Graph::removeFromNeighbors(Node* targetVertex){
   for(auto it = adjList.begin(); it != adjList.end(); it++){
     for(unsigned int i = 0; i < it->second.size(); i++){
       if(targetVertex == it->second[i]){
@@ -38,7 +31,14 @@ bool Graph::deleteVertex(string id){
       }
     }
   }
-  //erase vertex from adjList
+}
+bool Graph::removeVertex(string id){
+  if(nodeTable.find(id) == nodeTable.end()){
+    std::cout << "Error, vertex to delete("<< id << ") does not exist\n";
+    return false;
+  }
+  Node* targetVertex = nodeTable[id];
+  removeFromNeighbors(targetVertex);
   for(auto it = adjList.begin(); it != adjList.end(); it++){
     if(targetVertex == it->first){
       adjList.erase(it);
@@ -46,7 +46,6 @@ bool Graph::deleteVertex(string id){
     }
   }
   nodeTable.erase(id);
-  //delete targetVertex;
   return true;
 }
 bool Graph::alreadyNeighbor(string neighborId, std::vector<Node*> v){
@@ -132,4 +131,9 @@ void Graph::printGraph(){
       std::cout<<"\n";
     }
   }
+}
+void Graph::listVertexIds(){
+    for(auto it = adjList.begin(); it < adjList.end(); it++){
+      std::cout << it->first->getId() << "\n";
+    }
 }
