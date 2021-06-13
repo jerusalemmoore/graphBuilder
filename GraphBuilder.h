@@ -3,19 +3,22 @@ class GraphBuilder{
   public:
     GraphBuilder();
     ~GraphBuilder();
-    void buildGraph();
+    void buildGraphPage();
     void runBuilder();
-    void makeGraph();
-    void addVertex();
-    void removeVertex();
-    void addNeighbor();
-    void removeNeighbor();
-    void printAllData();
-    void listVertices();
-    void printVertexInfo();
+    void addVertexPage();
+    void removeVertexPage();
+    void addNeighborPage();
+    void removeNeighborPage();
+    void printCurrentGraph();
+    void listCurrentVertices();
+    void printVertexInfoPage();
+    void listAllGraphs();
+    bool confirmEntry(string entry);
+
     //void runAlgorithm();
   private:
     std::unordered_map<string, Graph*> graphs;
+    //build doubly linked list for traversing graphs
     bool running;
     string currentGraph;
 };

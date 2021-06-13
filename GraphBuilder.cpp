@@ -1,5 +1,9 @@
 //#include "Node.h"
 #include "GraphBuilder.h"
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
 GraphBuilder::GraphBuilder(){
   running = true;
 
@@ -7,31 +11,83 @@ GraphBuilder::GraphBuilder(){
 GraphBuilder::~GraphBuilder(){
 
 }
-void GraphBuilder::buildGraph(){
+bool GraphBuilder::confirmEntry(string entry){
+  string input;
+  bool interaction = true;
+  while(interaction){
+  cout << "Is this information correct: y/n\n" << entry << endl;
+  cin >> input;
+  if(input == "n"){
+    return false;
+  }
+  else if(input =="y"){
+    return true;
+  }
+  else{
+    cout << "Invalid entry...\n";
+  }
+}
+return false;
+}
+/*
+  Ask for name of graph
+  Confirm name is correct
+  Store name/graph into graphs map
+*/
+void GraphBuilder::buildGraphPage(){
+  string input;
+  cout << "Please enter a unique name for the graph:\n";
+  cin >> input;
+  if(confirmEntry(input)){
+    if(graphs.count(input)){
+      cout << "Error, you already have a graph with the same name\n";
+
+      return buildGraphPage();
+    }
+    graphs[input] = new Graph();
+    cout << "Success, new graph built\n";
+    this->currentGraph = input;
+  }
+  else{
+    return buildGraphPage();
+  }
+
 
 }
-void GraphBuilder::makeGraph(){
+/*
+  Ask for id of vertex
+  Confirm id is corrrect
+  enter data into vertex
+  confirm data is correct
+*/
+void GraphBuilder::addVertexPage(){
 
 }
-void GraphBuilder::addVertex(){
+/*
+  get id of vertex to delete
+  run remove
+  if true success
+  if false error
+*/
+void GraphBuilder::removeVertexPage(){
 
 }
-void GraphBuilder::removeVertex(){
+/*
+  get start id  and end id
+*/
+void GraphBuilder::addNeighborPage(){
 
 }
-void GraphBuilder::addNeighbor(){
+void GraphBuilder::removeNeighborPage(){
 
 }
-void GraphBuilder::removeNeighbor(){
+void GraphBuilder::printCurrentGraph(){
 
 }
-void GraphBuilder::printAllData(){
+void GraphBuilder::listCurrentVertices(){
 
 }
-void GraphBuilder::listVertices(){
-
-}
-void GraphBuilder::printVertexInfo(){
+void GraphBuilder::printVertexInfoPage(){
 
 }
 void GraphBuilder::runBuilder(){
@@ -47,7 +103,7 @@ void GraphBuilder::runBuilder(){
   // newNode2->printData();
   // newNode3->printData();
   //GRAPH TESTING
-  Graph newGraph = Graph();
+
   char input;
   while(running){
     if(graphs.empty()){
@@ -68,7 +124,7 @@ void GraphBuilder::runBuilder(){
     std::cout << "9. Quit\n";
     std::cin >> input;
     if(input == '1'){
-      makeGraph();
+      buildGraphPage();
       // string id;
       // string data;
       // std::cout << "Enter an id for vertex";
@@ -80,25 +136,25 @@ void GraphBuilder::runBuilder(){
 
     }
     else if(input == '2'){
-      addVertex();
+      addVertexPage();
     }
     else if(input == '3'){
-      removeVertex();
+      removeVertexPage();
     }
     else if(input == '4'){
-      addNeighbor();
+      addNeighborPage();
     }
     else if(input == '5'){
-      removeNeighbor();
+      removeNeighborPage();
     }
     else if(input == '6'){
-      printAllData();
+      printCurrentGraph();
     }
     else if(input == '7'){
-      listVertices();
+      listCurrentVertices();
     }
     else if(input == '8'){
-      printVertexInfo();
+      printVertexInfoPage();
     }
     else if(input == '9'){
         running = false;
