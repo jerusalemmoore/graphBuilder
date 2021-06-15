@@ -1,3 +1,4 @@
+#include <functional>
 #include "Graph.h"
 class GraphBuilder{
   public:
@@ -6,6 +7,7 @@ class GraphBuilder{
     void buildGraphPage();
     void runBuilder();
     void addVertexPage();
+    void getVertexData(string id);
     void removeVertexPage();
     void addNeighborPage();
     void removeNeighborPage();
@@ -13,6 +15,7 @@ class GraphBuilder{
     void listCurrentVertices();
     void printVertexInfoPage();
     void listAllGraphs();
+    void errorView(void (GraphBuilder::*f)());
     bool confirmEntry(string entry);
 
     //void runAlgorithm();

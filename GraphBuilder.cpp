@@ -1,9 +1,15 @@
 //#include "Node.h"
+#include <stdlib.h>
+#include<unistd.h>
+
 #include "GraphBuilder.h"
+#define BACK "b"
 using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
+const int ESC = 27;
+
 GraphBuilder::GraphBuilder(){
   running = true;
 
@@ -12,22 +18,33 @@ GraphBuilder::~GraphBuilder(){
 
 }
 bool GraphBuilder::confirmEntry(string entry){
+  system("clear");//clear terminal before outputting view
   string input;
   bool interaction = true;
+  //cin.clear();
   while(interaction){
-  cout << "Is this information correct: y/n\n" << entry << endl;
-  cin >> input;
-  if(input == "n"){
-    return false;
+    cout << "Is this information correct: y/n\n" << entry << endl;
+    cin >> input;
+    if(input == "n"){
+      return false;
+    }
+    else if(input =="y"){
+      return true;
+    }
+    else{
+      cout << "Invalid entry...\n";
+    }
   }
-  else if(input =="y"){
-    return true;
-  }
-  else{
-    cout << "Invalid entry...\n";
-  }
-}
 return false;
+}
+void GraphBuilder::errorView(void (GraphBuilder::*f)()){
+  // string decision;
+  // cout << "Error, you already have a graph with the same name(input)\n";
+  // cout << "Press b to go back\n";
+  // cin >> decision;
+  // if(decision == BACK){
+  //   return (this->*f)();
+  // }
 }
 /*
   Ask for name of graph
@@ -35,14 +52,22 @@ return false;
   Store name/graph into graphs map
 */
 void GraphBuilder::buildGraphPage(){
+  system("clear");
   string input;
-  cout << "Please enter a unique name for the graph:\n";
+  cout << "Please enter a unique name for the graph(press ESC, then ENTER to go back):\n";
   cin >> input;
+  if(input.find(27) != std::string::npos){//check if ESC is entered
+    return;
+  }
   if(confirmEntry(input)){
-    if(graphs.count(input)){
-      cout << "Error, you already have a graph with the same name\n";
-
-      return buildGraphPage();
+    string decision;
+    while(graphs.count(input)){
+      cout << "Error, you already have a graph with the same name("<< input << ")\n";
+      cout << "Press b to go back\n";
+      cin >> decision;
+      if(decision == BACK){
+        return buildGraphPage();
+      }
     }
     graphs[input] = new Graph();
     cout << "Success, new graph built\n";
@@ -54,6 +79,19 @@ void GraphBuilder::buildGraphPage(){
 
 
 }
+
+void GraphBuilder::getVertexData(string id){
+  string data;
+  cout << "Please enter  data for vertex(string, double, int).\n";
+  cin >> data;
+  if(confirmEntry(data)){
+    graphs[currentGraph]->addVertex(data, id);
+    usleep(1000000 * 1);
+  }
+  else{
+    return getVertexData(id);
+  }
+}
 /*
   Ask for id of vertex
   Confirm id is corrrect
@@ -61,6 +99,39 @@ void GraphBuilder::buildGraphPage(){
   confirm data is correct
 */
 void GraphBuilder::addVertexPage(){
+  system("clear");
+  string id;
+  while(currentGraph.empty()){
+    cout << "Error, there are currently no graphs to add vertices to. Please build a graph first...\n";
+    cout << "Press b to go back\n";
+    cin >> id;
+    if(id == BACK){
+      return;
+    }
+  }
+  cout << "Please enter a unique name for a new vertex(press ESC, then ENTER to go back):\n";
+  cin >> id;
+  if(id.find(27) != std::string::npos){//check if ESC is entered
+    return;
+  }
+  if(confirmEntry(id)){
+    string decision;
+    while(graphs[currentGraph]->nodeExists(id)){
+      cout << "Error, you already have a vertex named "<< id << " in graph " << currentGraph << "\n";
+      cout << "Press b to go back\n";
+      cin >> decision;
+      if(decision == BACK){
+        return addVertexPage();
+      }
+    }
+    //graphs[input] = new Graph();
+    //cout << "Success, new graph built\n";
+    //this->currentGraph = input;
+    getVertexData(id);
+  }
+  else{
+    return addVertexPage();
+  }
 
 }
 /*
@@ -91,21 +162,9 @@ void GraphBuilder::printVertexInfoPage(){
 
 }
 void GraphBuilder::runBuilder(){
-  //NODE TESTING
-  int data = 26;
-  // Node* newNode = new Node(data, "node1");
-  double data2 = 26.23;
-  // Node* newNode2 = new Node(data2, "node2");
-  string data3 = "hello string";
-  double data4 = 49.66698;
-  // Node* newNode3 = new Node(data3, "node3");
-  // newNode->printData();
-  // newNode2->printData();
-  // newNode3->printData();
-  //GRAPH TESTING
-
   char input;
   while(running){
+    system("clear");
     if(graphs.empty()){
       std::cout << "Current Graph: No graphs built\n\n";
     }
