@@ -15,7 +15,9 @@ GraphBuilder::GraphBuilder(){
 
 }
 GraphBuilder::~GraphBuilder(){
-
+  for(auto& it: graphs){
+    delete it.second;
+  }
 }
 bool GraphBuilder::confirmEntry(string entry){
   system("clear");//clear terminal before outputting view

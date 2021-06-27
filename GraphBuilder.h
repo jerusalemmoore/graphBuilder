@@ -17,7 +17,7 @@ class GraphBuilder{
     void listAllGraphs();
     void noGraphsError();
     void duplicateGraphError(string dupGraphName);
-    void duplicateVertexError(string vertName, string currGraphName);
+    void duplicateVertexError(string vertName, string currGraphName);//LAST THING YOU DID, DO REMOVE VERTEX VIEW NEXT
     bool confirmEntry(string entry);
 
     //void runAlgorithm();
