@@ -37,15 +37,13 @@ bool GraphBuilder::confirmEntry(string entry){
   }
 return false;
 }
-void GraphBuilder::errorView(void (GraphBuilder::*f)()){
-  // string decision;
-  // cout << "Error, you already have a graph with the same name(input)\n";
-  // cout << "Press b to go back\n";
-  // cin >> decision;
-  // if(decision == BACK){
-  //   return (this->*f)();
-  // }
-}
+void GraphBuilder::duplicateGraphError(string dupGraphName){
+  string decision;
+  cout << "Error, you already have a graph with the same name("<< dupGraphName << ")\n";
+  cout << "Press any key to go back\n";
+  cin >> decision;
+}//YOU WERE WORKING ON THIS
+
 /*
   Ask for name of graph
   Confirm name is correct
@@ -60,14 +58,9 @@ void GraphBuilder::buildGraphPage(){
     return;
   }
   if(confirmEntry(input)){
-    string decision;
-    while(graphs.count(input)){
-      cout << "Error, you already have a graph with the same name("<< input << ")\n";
-      cout << "Press b to go back\n";
-      cin >> decision;
-      if(decision == BACK){
-        return buildGraphPage();
-      }
+    while(graphs.count(input)){//if graph already exists with entered name
+      duplicateGraphError(input);
+      return buildGraphPage();
     }
     graphs[input] = new Graph();
     cout << "Success, new graph built\n";
@@ -92,6 +85,22 @@ void GraphBuilder::getVertexData(string id){
     return getVertexData(id);
   }
 }
+void GraphBuilder::noGraphsError(){
+  string input;
+  cout << "Error, there are currently no graphs to add vertices to. Please build a graph first...\n";
+  cout << "Press any key to go back\n";
+  cin >> input;
+  // if(id == BACK){
+  //   return;
+  // }
+}
+void GraphBuilder::duplicateVertexError(string vertName, string currGraphName){
+  string input;
+  cout << "Error, you already have a vertex named "<< vertName << " in graph named " << currGraphName << "\n";
+  cout << "Press any key to go back\n";
+  cin >> input;
+}
+
 /*
   Ask for id of vertex
   Confirm id is corrrect
@@ -101,13 +110,15 @@ void GraphBuilder::getVertexData(string id){
 void GraphBuilder::addVertexPage(){
   system("clear");
   string id;
-  while(currentGraph.empty()){
-    cout << "Error, there are currently no graphs to add vertices to. Please build a graph first...\n";
-    cout << "Press b to go back\n";
-    cin >> id;
-    if(id == BACK){
-      return;
-    }
+  while(currentGraph.empty()){//if graph builder isn't assigned it means there aren't any graphs built by user yet
+    // cout << "Error, there are currently no graphs to add vertices to. Please build a graph first...\n";
+    // cout << "Press b to go back\n";
+    // cin >> id;
+    // if(id == BACK){
+    //   return;
+    // }
+    noGraphsError();
+    return;
   }
   cout << "Please enter a unique name for a new vertex(press ESC, then ENTER to go back):\n";
   cin >> id;
@@ -117,12 +128,9 @@ void GraphBuilder::addVertexPage(){
   if(confirmEntry(id)){
     string decision;
     while(graphs[currentGraph]->nodeExists(id)){
-      cout << "Error, you already have a vertex named "<< id << " in graph " << currentGraph << "\n";
-      cout << "Press b to go back\n";
-      cin >> decision;
-      if(decision == BACK){
-        return addVertexPage();
-      }
+      duplicateVertexError(id, currentGraph);
+      return addVertexPage();
+
     }
     //graphs[input] = new Graph();
     //cout << "Success, new graph built\n";
@@ -142,6 +150,7 @@ void GraphBuilder::addVertexPage(){
 */
 void GraphBuilder::removeVertexPage(){
 
+  Graph* currGraph = graphs[currentGraph];
 }
 /*
   get start id  and end id

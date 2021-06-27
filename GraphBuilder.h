@@ -15,7 +15,9 @@ class GraphBuilder{
     void listCurrentVertices();
     void printVertexInfoPage();
     void listAllGraphs();
-    void errorView(void (GraphBuilder::*f)());
+    void noGraphsError();
+    void duplicateGraphError(string dupGraphName);
+    void duplicateVertexError(string vertName, string currGraphName);
     bool confirmEntry(string entry);
 
     //void runAlgorithm();
