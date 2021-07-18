@@ -1,7 +1,8 @@
 //#include "Node.h"
 #include <stdlib.h>
 #include<unistd.h>
-
+#include <term.h>
+#include<curses.h>
 #include "GraphBuilder.h"
 #define BACK "b"
 using std::cout;
@@ -14,13 +15,24 @@ GraphBuilder::GraphBuilder(){
   running = true;
 
 }
+/*
+  deleting all graphs created in the graph builders storage
+*/
 GraphBuilder::~GraphBuilder(){
   for(auto& it: graphs){
     delete it.second;
   }
 }
+/*
+  confirm entry typed in by user is correct
+  params:
+    entry - string typed by user that we want to verify
+  return:
+    true if entry typed by user is correct
+    false otherwise
+*/
 bool GraphBuilder::confirmEntry(string entry){
-  system("clear");//clear terminal before outputting view
+  clearScreen();//clear terminal before outputting view
   string input;
   bool interaction = true;
   //cin.clear();
@@ -34,11 +46,20 @@ bool GraphBuilder::confirmEntry(string entry){
       return true;
     }
     else{
+      clearScreen();//clear terminal before outputting view
       cout << "Invalid entry...\n";
     }
   }
 return false;
 }
+/*
+  view notifying user that the graph builder already contains a graph with
+  the name that was entered
+  params:
+    dupGraphName - name of the duplicate graph the user attempted to create
+  return:
+    view returns on any key press
+*/
 void GraphBuilder::duplicateGraphError(string dupGraphName){
   string decision;
   cout << "Error, you already have a graph with the same name("<< dupGraphName << ")\n";
@@ -52,7 +73,7 @@ void GraphBuilder::duplicateGraphError(string dupGraphName){
   Store name/graph into graphs map
 */
 void GraphBuilder::buildGraphPage(){
-  system("clear");
+  clearScreen();//clear terminal before outputting view
   string input;
   cout << "Please enter a unique name for the graph(press ESC, then ENTER to go back):\n";
   cin >> input;
@@ -71,8 +92,6 @@ void GraphBuilder::buildGraphPage(){
   else{
     return buildGraphPage();
   }
-
-
 }
 
 void GraphBuilder::getVertexData(string id){
@@ -87,15 +106,14 @@ void GraphBuilder::getVertexData(string id){
     return getVertexData(id);
   }
 }
+
 void GraphBuilder::noGraphsError(){
   string input;
-  cout << "Error, there are currently no graphs to add vertices to. Please build a graph first...\n";
+  cout << "Error, currently no graphs exist in GraphBuilder storage, Please build a graph first...\n";
   cout << "Press any key to go back\n";
   cin >> input;
-  // if(id == BACK){
-  //   return;
-  // }
 }
+
 void GraphBuilder::duplicateVertexError(string vertName, string currGraphName){
   string input;
   cout << "Error, you already have a vertex named "<< vertName << " in graph named " << currGraphName << "\n";
@@ -108,17 +126,12 @@ void GraphBuilder::duplicateVertexError(string vertName, string currGraphName){
   Confirm id is corrrect
   enter data into vertex
   confirm data is correct
+
 */
 void GraphBuilder::addVertexPage(){
-  system("clear");
+  clearScreen();
   string id;
-  while(currentGraph.empty()){//if graph builder isn't assigned it means there aren't any graphs built by user yet
-    // cout << "Error, there are currently no graphs to add vertices to. Please build a graph first...\n";
-    // cout << "Press b to go back\n";
-    // cin >> id;
-    // if(id == BACK){
-    //   return;
-    // }
+  while(currentGraph.empty()){//if graph builder member variable currentGraph isn't assigned it means there aren't any graphs built by user yet
     noGraphsError();
     return;
   }
@@ -152,7 +165,14 @@ void GraphBuilder::addVertexPage(){
 */
 void GraphBuilder::removeVertexPage(){
 
-  Graph* currGraph = graphs[currentGraph];
+  if(!currentGraph.empty()){
+    Graph* currGraph = graphs[currentGraph];
+
+  }
+  else{
+    noGraphsError();
+  }
+  // cout << "Please type name of "
 }
 /*
   get start id  and end id
@@ -167,15 +187,37 @@ void GraphBuilder::printCurrentGraph(){
 
 }
 void GraphBuilder::listCurrentVertices(){
-
+  if(!currentGraph.empty()){
+    Graph* currGraph = graphs[currentGraph];
+    currGraph->listVertexIds();
+  }
+  else{
+    noGraphsError();
+  }
 }
 void GraphBuilder::printVertexInfoPage(){
 
 }
+
+void GraphBuilder::clearScreen(){
+  if (!cur_term)
+  {
+  int result;
+  setupterm( NULL, STDOUT_FILENO, &result );
+  if (result <= 0) return;
+  }
+
+putp( tigetstr( "clear" ) );
+}
+/*
+  main view for graph builder application,
+  provides options and displays the name of the graph
+  the user is working on currently
+*/
 void GraphBuilder::runBuilder(){
   char input;
   while(running){
-    system("clear");
+    clearScreen();
     if(graphs.empty()){
       std::cout << "Current Graph: No graphs built\n\n";
     }

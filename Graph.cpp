@@ -133,7 +133,10 @@ void Graph::printGraph(){
   }
 }
 void Graph::listVertexIds(){
-    for(auto it = adjList.begin(); it < adjList.end(); it++){
-      std::cout << it->first->getId() << "\n";
+    if(!adjList.empty()){
+      for(auto it = adjList.begin(); it < adjList.end(); it++){
+        std::cout << it->first->getId() << "\n";
+      }
     }
+
 }

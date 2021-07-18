@@ -4,6 +4,6 @@ TARGET = GraphBuilder
 all: $(TARGET)
 
 $(TARGET): $(TARGET).cpp
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp Graph.cpp Node.cpp 
+	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp Graph.cpp Node.cpp -lncurses
 clean:
 	$(RM) $(TARGET)
